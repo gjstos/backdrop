@@ -23,7 +23,7 @@ class DemoApp extends StatelessWidget {
 
 /// The home page of the demo app showing a selection of use cases.
 class HomePage extends StatelessWidget {
-  List<UseCase> _useCases = [
+  final List<UseCase> _useCases = [
     ContextualInfoUseCase(),
     ContextualControlsUseCase(),
     NavigationUseCase(),

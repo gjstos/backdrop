@@ -1,6 +1,14 @@
 import 'package:backdrop/scaffold.dart';
 import 'package:flutter/material.dart';
 
+/* 
+  TODO:  
+  - [ ] Make this Widget receive information from ListView (or any child that 
+  returns data from scrolling) and auto-hides the Divider when the child is in 
+  its home position.
+
+*/
+
 /// A wrapper for adding a sub-header to the used backdrop front layer(s).
 /// This class can be passed to [BackdropScaffold] to specify the sub-header
 /// that should be shown while the front layer is "inactive" (the back layer is
@@ -102,7 +110,18 @@ class BackdropSubHeader extends StatelessWidget {
             ],
           ),
         ),
-        divider ?? const Divider(height: 4.0, indent: 16.0, endIndent: 16.0),
+
+        /// Here I decided to change the default to suit the prototypes, since
+        /// in the current version of the packet the Divider does not
+        /// self-conceal when the frontLayer isn't scrolling.
+        ///
+        divider ??
+            const Divider(
+              height: 4.0,
+              indent: 16.0,
+              endIndent: 16.0,
+              color: Colors.transparent,
+            ),
       ],
     );
   }
