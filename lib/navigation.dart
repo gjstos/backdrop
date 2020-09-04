@@ -53,6 +53,9 @@ class BackdropNavigationBackLayer extends StatelessWidget {
   /// Customizable separatorBuilder used with [ListView.separated].
   final IndexedWidgetBuilder separatorBuilder;
 
+  /// Customize the BorderRadius of the InkWell
+  final BorderRadius inkWellBorderRadius;
+
   /// Creates an instance of [BackdropNavigationBackLayer] to be used with
   /// [BackdropScaffold].
   ///
@@ -63,6 +66,7 @@ class BackdropNavigationBackLayer extends StatelessWidget {
     this.onTap,
     this.separator,
     this.separatorBuilder,
+    this.inkWellBorderRadius,
   })  : assert(items != null),
         assert(items.isNotEmpty),
         super(key: key);
@@ -73,6 +77,7 @@ class BackdropNavigationBackLayer extends StatelessWidget {
       shrinkWrap: true,
       itemCount: items.length,
       itemBuilder: (context, position) => InkWell(
+        borderRadius: inkWellBorderRadius,
         child: items[position],
         onTap: () {
           // fling backdrop

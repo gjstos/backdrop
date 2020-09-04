@@ -175,12 +175,15 @@ class BackdropScaffold extends StatefulWidget {
   /// Will be called when [backLayer] have been revealed.
   final VoidCallback onBackLayerRevealed;
 
+  /// Space between [backLayer] and [frontLayer]
+  final double backLayerBottomSeparetor;
+
   /// Creates a backdrop scaffold to be used as a material widget.
   BackdropScaffold({
     this.controller,
     @Deprecated("Replace by use of BackdropAppBar. See BackdropAppBar.title."
         "This feature was deprecated after v0.2.17.")
-    this.title,
+        this.title,
     this.appBar,
     this.backLayer,
     this.frontLayer,
@@ -188,7 +191,7 @@ class BackdropScaffold extends StatefulWidget {
     this.subHeaderAlwaysActive = true,
     @Deprecated("Replace by use of BackdropAppBar. See BackdropAppBar.actions."
         "This feature was deprecated after v0.2.17.")
-    this.actions = const <Widget>[],
+        this.actions = const <Widget>[],
     this.headerHeight,
     this.frontLayerBorderRadius = const BorderRadius.only(
       topLeft: Radius.circular(16.0),
@@ -197,7 +200,7 @@ class BackdropScaffold extends StatefulWidget {
     @Deprecated("Replace by use of BackdropAppBar. See BackdropAppBar.leading"
         "and BackdropAppBar.automaticallyImplyLeading."
         "This feature was deprecated after v0.2.17.")
-    this.iconPosition = BackdropIconPosition.leading,
+        this.iconPosition = BackdropIconPosition.leading,
     this.stickyFrontLayer = false,
     this.animationCurve = Curves.easeInOut,
     this.resizeToAvoidBottomInset = true,
@@ -208,6 +211,7 @@ class BackdropScaffold extends StatefulWidget {
     this.floatingActionButtonAnimator,
     this.onBackLayerConcealed,
     this.onBackLayerRevealed,
+    this.backLayerBottomSeparetor = 0,
   });
 
   @override
@@ -289,7 +293,7 @@ class BackdropScaffoldState extends State<BackdropScaffold>
   /// Wether the back layer is concealed or not.
   bool get isBackLayerConcealed =>
       controller.status == AnimationStatus.completed ||
-          controller.status == AnimationStatus.forward;
+      controller.status == AnimationStatus.forward;
 
   /// Deprecated. Use [isBackLayerRevealed] instead.
   ///
@@ -301,7 +305,7 @@ class BackdropScaffoldState extends State<BackdropScaffold>
   /// Whether the back layer is revealed or not.
   bool get isBackLayerRevealed =>
       controller.status == AnimationStatus.dismissed ||
-          controller.status == AnimationStatus.reverse;
+      controller.status == AnimationStatus.reverse;
 
   /// Toggles the backdrop functionality.
   ///
@@ -356,8 +360,8 @@ class BackdropScaffoldState extends State<BackdropScaffold>
 
     // if subHeader then height of subHeader
     return ((_subHeaderKey.currentContext?.findRenderObject() as RenderBox)
-        ?.size
-        ?.height) ??
+            ?.size
+            ?.height) ??
         32.0;
   }
 
@@ -365,7 +369,7 @@ class BackdropScaffoldState extends State<BackdropScaffold>
       ((_backLayerKey.currentContext?.findRenderObject() as RenderBox)
           ?.size
           ?.height) ??
-          0.0;
+      0.0;
 
   Animation<RelativeRect> _getPanelAnimation(
       BuildContext context, BoxConstraints constraints) {
@@ -383,7 +387,11 @@ class BackdropScaffoldState extends State<BackdropScaffold>
       frontPanelHeight = -backPanelHeight;
     }
     return RelativeRectTween(
-      begin: RelativeRect.fromLTRB(0.0, backPanelHeight, 0.0, frontPanelHeight),
+      begin: RelativeRect.fromLTRB(
+          0.0,
+          backPanelHeight + widget.backLayerBottomSeparetor,
+          0.0,
+          frontPanelHeight),
       end: RelativeRect.fromLTRB(0.0, 0.0, 0.0, 0.0),
     ).animate(CurvedAnimation(
       parent: controller,
@@ -477,17 +485,56 @@ class BackdropScaffoldState extends State<BackdropScaffold>
         key: scaffoldKey,
         floatingActionButtonLocation: this.widget.floatingActionButtonLocation,
         floatingActionButtonAnimator: this.widget.floatingActionButtonAnimator,
-        appBar: widget.appBar ??
-            AppBar(
-              title: widget.title,
-              actions: widget.iconPosition == BackdropIconPosition.action
-                  ? <Widget>[BackdropToggleButton()] + widget.actions
-                  : widget.actions,
-              elevation: 0.0,
-              leading: widget.iconPosition == BackdropIconPosition.leading
-                  ? BackdropToggleButton()
-                  : null,
-            ),
+        /*  
+          I removed the obligation to have an appBar by default based on the 
+          following question: 
+
+            What if the application has a route systems based on the [backLayer], 
+            changing only the [frontLayer]?
+          
+          With a mandatory appBar it becomes impossible to follow in this 
+          approach.
+         
+         Ex: 
+
+            class ExampleMainBackdrop extends StatelessWidget {
+              @override
+              Widget build(BuildContext context) {
+                return BackdropScaffold(
+                  backLayer: BackdropNavigationBackLayer(
+                    items: [
+                      ListTile(title: Text('Body 01')),
+                      ListTile(title: Text('Body 02')),
+                      ListTile(title: Text('Body 03')),
+                    ],
+                    onTap: (value) => Navigator.of(context).pushNamed('route$value'),
+                  ),
+                  frontLayer: ListView(
+                    children: [
+                      Body01(),
+                      Body02(),
+                      Body03(),
+                    ],
+                  ),
+                );
+              }
+            }
+            
+            class Body01 extends StatelessWidget {
+              final String title;
+            
+              const Body01({Key key, this.title}) : super(key: key);
+            
+              @override
+              Widget build(BuildContext context) {
+                return BackdropScaffold(
+                  subHeader: Text(title),
+                  frontLayer: Container(),
+                );
+              }
+            }
+        */
+        appBar: widget.appBar,
         body: LayoutBuilder(
           builder: (context, constraints) {
             return Container(
