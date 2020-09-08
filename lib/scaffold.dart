@@ -496,7 +496,7 @@ class BackdropScaffoldState extends State<BackdropScaffold>
           approach.
          
          Ex: 
-
+          ```dart
             class ExampleMainBackdrop extends StatelessWidget {
               @override
               Widget build(BuildContext context) {
@@ -533,6 +533,7 @@ class BackdropScaffoldState extends State<BackdropScaffold>
                 );
               }
             }
+          ```
         */
         appBar: widget.appBar,
         body: LayoutBuilder(
