@@ -176,7 +176,7 @@ class BackdropScaffold extends StatefulWidget {
   final VoidCallback onBackLayerRevealed;
 
   /// Space between [backLayer] and [frontLayer]
-  final double backLayerBottomSeparetor;
+  final double backLayerBottomSeparator;
 
   /// Creates a backdrop scaffold to be used as a material widget.
   BackdropScaffold({
@@ -211,7 +211,7 @@ class BackdropScaffold extends StatefulWidget {
     this.floatingActionButtonAnimator,
     this.onBackLayerConcealed,
     this.onBackLayerRevealed,
-    this.backLayerBottomSeparetor = 0,
+    this.backLayerBottomSeparator = 0,
   });
 
   @override
@@ -389,7 +389,7 @@ class BackdropScaffoldState extends State<BackdropScaffold>
     return RelativeRectTween(
       begin: RelativeRect.fromLTRB(
           0.0,
-          backPanelHeight + widget.backLayerBottomSeparetor,
+          backPanelHeight + widget.backLayerBottomSeparator,
           0.0,
           frontPanelHeight),
       end: RelativeRect.fromLTRB(0.0, 0.0, 0.0, 0.0),
