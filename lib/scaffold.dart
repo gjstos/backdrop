@@ -1,5 +1,4 @@
 import 'package:backdrop/app_bar.dart';
-import 'package:backdrop/button.dart';
 import 'package:flutter/material.dart';
 
 /// This class is an InheritedWidget that exposes state of [BackdropScaffold]
