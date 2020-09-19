@@ -414,7 +414,7 @@ class BackdropScaffoldState extends State<BackdropScaffold>
                   : Container(),
               Expanded(
                 child: Container(
-                  color: widget.inactiveOverlayColor.withOpacity(0.7),
+                  color: widget.inactiveOverlayColor,
                 ),
               ),
             ],
